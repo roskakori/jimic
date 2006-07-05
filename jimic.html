@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+<title>Jimic</title>
+<meta name="author" content="Thomas Aglassinger" />
+</head>
+<body>
+<h1>Jimic</h1>
+<p>Jimic is a minimalistic eComic viewer for Java platforms supporting JDK 1.1 and AWT.
+It allows to read eComics stored in CBZ format with images encoded in JFIF/JPEG or GIF format.
+To read comics or images in other formats, they first have to be converted (for example using
+<a href="http://jomic.sourceforge.net/">Jomic</a>).</p>
+
+<h2>Features and limitations</h2>
+
+<p>Jimic is designed to be simple and small:</p>
+
+<ul>
+<li>Maximum screen real estate due lack of menus, toolbars and anything else not related to showing images.</li>
+<li>No write access needed. Images are read directly from the eComic ZIP archive, and extracted to memory.</li>
+<li>Tiny application size.</li>
+<li>Runs with JDK 1.1 and AWT (as released way back in 1997).</li>
+</ul>
+
+<p>Because of its simplicity, a few things you might have been used to from other eComic viewers are missing.
+The limitations are by design, and not considered bugs.</p>
+
+<ul>
+<li>No scrollbar to move within the image (because it would waste screen space).</li>
+<li>No online help; you have to learn the keyboard definition by heart (it's simple though because there isn't much you can do with Jimic anyway).</li>
+<li>No two page mode.</li>
+<li>No caching and precaching.</li>
+<li>Read only one comic at a time.</li>
+<li>No different view modes like "scale to fit" (because handheld displays are usually to small for that anyway).</li>
+</ul>
+
+<p>And there are a couple of issues that ought to be addressed eventually:</p>
+
+<ul>
+<li>Errors should be shown in a dialog instead of just logged to the console.</li>
+<li>Flickering while scrolling the image should be reduced by using double buffering.</li>
+<li>Scrolling should only be allowed within the image range.</li>
+<li>Image names should be sorted naturally instead of alphabetically (23 comes before 123).</li> 
+</ul>
+
+<h2>Requirements</h2>
+
+<p>Jimic requires a Java and its Abstract Windowing Toolkit (AWT). These have been available since
+1997, and are supported by pretty much everything that claims Java with GUI support.</p>
+
+<h2>Installation and startup</h2>
+
+<p>To install Jimic, unpack <code>Jimic.zip</code> and simply copy the <code>Jimic.jar</code> to 
+any place you like.</p>
+
+<p>To start Jimic from the console, type:</p>
+
+<pre>java -jar /install/path/Jimic.jar</pre>
+
+<p>Optionally you can specify a file name of a comic to open, for example:</p>
+
+<pre>java -jar /install/path/Jimic.jar /comics/blah.cbz</pre>
+
+<p>On many platforms you can also start Jimic from the desktop by just double-clicking the <code>Jimic.jar</code>.</p>
+
+<h2>Usage</h2>
+
+<p>Jimic opens an empty window. Press one of the following keys:</p>
+
+<ul>
+<li>O - Open a dialog to select a comic to read.</li>
+<li>A - Show dialog with information about the application such as version number and copyright.</li>
+<li>Page up, page down, Space - Go to previous/next image.</li>
+<li>Cursor keys - scroll image.</li>
+<li>G or L - Open a dialog to select the numer of an image to show.</li>
+<li>Q or Esc - Quit the application.</li>
+</ul>
+
+<p>Additionally you can use the mouse:</p>
+
+<ul>
+<li>Click left - Go to next image.</li>
+<li>Drag with left button pressed - Scroll image.</li>
+</ul>
+
+<h2>License</h2>
+
+<p>Jimic is copyright 2006 Thomas Aglassinger.</p>
+<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.</p>
+
+<h2>Source code</h2>
+
+<p>The source code in included in the <code>Jimic.zip</code> in the directory <code>source</code>. 
+There also is a <code>build.xml</code> for <a href="http://ant.apache.org/">ant</a>.
+To compile the source code, run:</p>
+
+<pre>ant</pre>
+
+To get information about other targets, run:
+
+<pre>ant -projecthelp</pre>
+
+</body>
+</html>
