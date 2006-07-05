@@ -224,11 +224,15 @@ public class ComicController implements KeyListener, WindowListener,
 	}
 
 	public void mouseDragged(MouseEvent mouseEvent) {
-		comicView.scroll(mouseEvent.getX() - lastMouseDragPoint.x, mouseEvent
-				.getY()
-				- lastMouseDragPoint.y);
+		if (lastMouseDragPoint != null) {
+			comicView.scroll(mouseEvent.getX() - lastMouseDragPoint.x, mouseEvent
+					.getY()
+					- lastMouseDragPoint.y);
+			mouseDragged = true;
+		} else {
+			System.err.println("warning: ignoring drag because lastMouseDragPoint = null");
+		}
 		lastMouseDragPoint = mouseEvent.getPoint();
-		mouseDragged = true;
 	}
 
 	public void mouseMoved(MouseEvent mouseEvent) {

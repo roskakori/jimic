@@ -67,12 +67,23 @@ public class ImageCanvas extends Canvas {
 		topLeftY = 0;
 	}
 
-	public void paint(Graphics g) {
-		super.paint(g);
+	public void update(Graphics g) {
+		g.setColor(Color.GRAY);
 		if (image != null) {
+			g.fillRect(0, 0, getWidth(), topLeftY - 1);
+			g.fillRect(0, topLeftY - 1, topLeftX - 1, imageHeight);
+			g.fillRect(topLeftX + imageWidth, topLeftY - 1, getWidth(),
+					imageHeight);
+			g.fillRect(0, topLeftY + imageHeight, getWidth(), getHeight());
 			g.drawImage(image, topLeftX, topLeftY, imageWidth, imageHeight,
 					Color.BLACK, null);
+		} else {
+			g.fillRect(0, 0, getWidth(), getHeight());
 		}
+	}
+
+	public void paint(Graphics g) {
+		update(g);
 	}
 
 	/**
