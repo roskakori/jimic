@@ -16,6 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 package net.sf.jimic;
 
+import java.awt.Cursor;
 import java.awt.Dialog;
 import java.awt.FileDialog;
 import java.awt.Point;
@@ -229,6 +230,7 @@ public class ComicController implements KeyListener, WindowListener,
 					.getY()
 					- lastMouseDragPoint.y);
 			mouseDragged = true;
+			comicView.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 		} else {
 			System.err.println("warning: ignoring drag because lastMouseDragPoint = null");
 		}
@@ -260,6 +262,7 @@ public class ComicController implements KeyListener, WindowListener,
 		}
 		lastMouseDragPoint = null;
 		mouseDragged = false;
+		comicView.setCursor(Cursor.getDefaultCursor());
 	}
 
 	public void mouseEntered(MouseEvent mouseEvent) {
