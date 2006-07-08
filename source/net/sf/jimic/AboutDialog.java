@@ -35,7 +35,7 @@ import java.awt.event.WindowListener;
 public class AboutDialog extends Dialog implements KeyListener, WindowListener {
 	private String[] LINES = new String[] { "Jimic",
 			"Version " + Jimic.VERSION_TAG + " (" + Jimic.VERSION_DATE + ")",
-			"<http://jimic.sourceforge.net>",
+			"<http://www.roskakori.at/jimic/>",
 			"Copyright Thomas Aglassinger", "Distributed under the",
 			"GNU General Public License" };
 
