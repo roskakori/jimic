@@ -74,7 +74,7 @@ public class ComicController implements KeyListener, WindowListener,
 		}
 	}
 
-	private void performOpen() throws IOException, InterruptedException {
+	private void performOpen() {
 		FilenameFilter comicFilenameFilter = new ComicFilenameFilter();
 		FileDialog openDialog = new FileDialog(comicView, "Open comic...",
 				FileDialog.LOAD);
@@ -83,8 +83,16 @@ public class ComicController implements KeyListener, WindowListener,
 		String comicFilePath = openDialog.getFile();
 		if (comicFilePath != null) {
 			File comicFile = new File(openDialog.getDirectory(), comicFilePath);
-			open(comicFile);
+			try {
+				open(comicFile);
+			} catch (Exception error) {
+				showOpenError(comicFile, error);
+			}
 		}
+	}
+
+	public void showOpenError(File comicFile, Exception error) {
+		showError("cannot open comic: " + comicFile.getAbsolutePath(), error);
 	}
 
 	private void performScrollDown() {
@@ -112,13 +120,21 @@ public class ComicController implements KeyListener, WindowListener,
 	}
 
 	public void showError(KeyEvent keyEvent, Throwable error) {
-		System.err.println("cannot process key event: " + keyEvent);
-		error.printStackTrace();
+		showError("cannot process key event: " + keyEvent, error);
+	}
+
+	public void showError(String message, Throwable error) {
+		System.err.println("error: " + message);
+		if (error != null) {
+			error.printStackTrace();
+		}
+		Dialog errorDialog = new ErrorDialog(comicView, message, error);
+		centerDialog(errorDialog);
+		errorDialog.setVisible(true);
 	}
 
 	public void showError(MouseEvent mouseEvent, Throwable error) {
-		System.err.println("cannot process key event: " + mouseEvent);
-		error.printStackTrace();
+		showError("cannot process mouse event: " + mouseEvent, error);
 	}
 
 	public void keyReleased(KeyEvent keyEvent) {
@@ -253,7 +269,7 @@ public class ComicController implements KeyListener, WindowListener,
 	public void mouseReleased(MouseEvent mouseEvent) {
 		boolean leftButtonReleased = (mouseEvent.getButton() == MouseEvent.BUTTON1);
 
-		if (!mouseDragged && leftButtonReleased) {
+		if (!mouseDragged && leftButtonReleased && (comicModel != null)) {
 			try {
 				performNext();
 			} catch (Exception error) {

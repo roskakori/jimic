@@ -73,11 +73,20 @@ public class ComicView extends Frame {
 
 	public void attemptToSetCurrentImageIndex(int newIndex) throws IOException,
 			InterruptedException {
-		if ((newIndex < 0) || (newIndex >= comicModel.getImageCount())) {
-			beep();
-		} else {
-			setCurrentImageIndex(newIndex);
+		if (hasComic()) {
+			if ((newIndex < 0) || (newIndex >= comicModel.getImageCount())) {
+				beep();
+			} else {
+				setCurrentImageIndex(newIndex);
+			}
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	private boolean hasComic() {
+		return comicModel != null;
 	}
 
 	private void beep() {

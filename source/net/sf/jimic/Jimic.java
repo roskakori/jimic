@@ -19,17 +19,16 @@ package net.sf.jimic;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
-import java.io.IOException;
 
 /**
- * Jimic, a minimalistic eComic viewer geared towards handhelds and cell phones.
+ * Jimic, a minimalistic eComic viewer for JDK 1.1 using AWT..
  * 
  * @author Thomas Aglassinger.
  */
 public class Jimic {
-	public static final String VERSION_TAG = "0.5";
+	public static final String VERSION_TAG = "0.6";
 
-	public static final String VERSION_DATE = "2006-07-05";
+	public static final String VERSION_DATE = "2006-07-09";
 
 	private ComicModel comicModel;
 
@@ -47,8 +46,12 @@ public class Jimic {
 		comicView.setVisible(true);
 	}
 
-	public void open(File comicFile) throws IOException, InterruptedException {
-		controller.open(comicFile);
+	public void open(File comicFile) {
+		try {
+			controller.open(comicFile);
+		} catch (Exception error) {
+			controller.showOpenError(comicFile, error);
+		}
 	}
 
 	public ComicModel getComicModel() {
@@ -58,8 +61,7 @@ public class Jimic {
 	/**
 	 * Run Jimic application.
 	 */
-	public static void main(String[] arguments) throws InterruptedException,
-			IOException {
+	public static void main(String[] arguments) {
 		if (arguments.length <= 1) {
 			Jimic jimic = new Jimic();
 			if (arguments.length == 1) {
@@ -67,8 +69,10 @@ public class Jimic {
 				jimic.open(comicFile);
 			}
 		} else {
-			System.out.println("Jimic " + VERSION_TAG + " (" + VERSION_DATE + ")");
-			System.out.println("Usage: java -jar Jomic.jar [/path/to/comic.cbz]");
+			System.out.println("Jimic " + VERSION_TAG + " (" + VERSION_DATE
+					+ ")");
+			System.out
+					.println("Usage: java -jar Jimic.jar [/path/to/comic.cbz]");
 		}
 	}
 }
