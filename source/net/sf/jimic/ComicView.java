@@ -82,9 +82,6 @@ public class ComicView extends Frame {
 		}
 	}
 
-	/**
-	 * @return
-	 */
 	private boolean hasComic() {
 		return comicModel != null;
 	}
