@@ -1,0 +1,38 @@
+Jimic Changes
+-------------
+
+(Most current version on top)
+
+Version 0.7, 09-Jul-2006
+
+- Fixed references to methods and constants not part of JDK 1.1.
+- Fixed that on some platforms (Mac OS X) the application kept running 
+  after closing the window using "quit" by calling System.exit().
+- Fixed IOException on Mac OS Classic when reading an image because 
+  InputStream.read(array) did not read the whole image even of the target 
+  array was big enough. Now the read() loops until all bytes are read.
+- Fixed ugly stripes of previous image when scrolling or changing the 
+  image to a smaller one.
+- Changed default size of window to just cover a large area of the screen 
+  instead of the whole. This fixes that on some platforms the window became 
+  to big because the stupid getScreenSize() function does not consider 
+  taskbars and stuff like that.
+- Changed cursor type during opening a comic to "wait cursor".
+- Changed image to be centered after changing the page (if the window is 
+  big enough).
+- Added this file to describe changes.
+- Added homepage at <http://www.roskakori.at/jimic/>.
+
+Version 0.6, 08-Jul-2006
+
+- Fixed flickering when dragging image.
+- Fixed NullPointerException when dragging image without any comic loaded.
+- Fixed NullPointerException after failing to open a comic.
+- Fixed NullPointerException when starting to drag image.
+- Changed error messages to be shown in a dialog instead of the console.
+- Changed background color from system default to gray.
+- Changed mouse pointer to "move pointer" during dragging the image.
+
+Version 0.5, 05-Jul-2006
+
+- First public release.
