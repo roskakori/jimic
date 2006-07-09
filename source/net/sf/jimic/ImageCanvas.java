@@ -28,6 +28,9 @@ import java.awt.Image;
  * @author Thomas Aglassinger.
  */
 public class ImageCanvas extends Canvas {
+
+	private Color backgroundColor;
+
 	private Image image;
 
 	private int imageWidth;
@@ -41,16 +44,16 @@ public class ImageCanvas extends Canvas {
 	private int topLeftY;
 
 	public ImageCanvas() {
+		backgroundColor = new Color(128, 128, 128);
 		preferredSize = new Dimension(0, 0);
 	}
 
 	public void setImage(Image newImage) {
 		image = newImage;
-		topLeftX = 0;
-		topLeftY = 0;
 		imageWidth = image.getWidth(null);
 		imageHeight = image.getHeight(null);
 		preferredSize = new Dimension(imageWidth, imageHeight);
+		scrollHome();
 	}
 
 	public Dimension getPreferredSize() {
@@ -65,20 +68,31 @@ public class ImageCanvas extends Canvas {
 	public void scrollHome() {
 		topLeftX = 0;
 		topLeftY = 0;
+		if (image != null) {
+			Dimension canvasSize = getSize();
+			int canvasWidth = canvasSize.width;
+			int canvasHeight = canvasSize.height;
+			topLeftX = Math.max(0, canvasWidth - imageWidth) / 2;
+			topLeftY = Math.max(0, canvasHeight - imageHeight) / 2;
+		}
 	}
 
 	public void update(Graphics g) {
-		g.setColor(Color.GRAY);
+		Dimension canvasSize = getSize();
+		int canvasWidth = canvasSize.width;
+		int canvasHeight = canvasSize.height;
+
+		g.setColor(backgroundColor);
 		if (image != null) {
-			g.fillRect(0, 0, getWidth(), topLeftY - 1);
-			g.fillRect(0, topLeftY - 1, topLeftX - 1, imageHeight);
-			g.fillRect(topLeftX + imageWidth, topLeftY - 1, getWidth(),
+			g.fillRect(0, 0, canvasWidth, topLeftY);
+			g.fillRect(0, topLeftY, topLeftX, imageHeight);
+			g.fillRect(topLeftX + imageWidth, topLeftY, canvasWidth,
 					imageHeight);
-			g.fillRect(0, topLeftY + imageHeight, getWidth(), getHeight());
+			g.fillRect(0, topLeftY + imageHeight, canvasWidth, canvasHeight);
 			g.drawImage(image, topLeftX, topLeftY, imageWidth, imageHeight,
-					Color.BLACK, null);
+					backgroundColor, null);
 		} else {
-			g.fillRect(0, 0, getWidth(), getHeight());
+			g.fillRect(0, 0, canvasWidth, canvasHeight);
 		}
 	}
 

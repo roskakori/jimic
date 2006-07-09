@@ -54,7 +54,7 @@ public class AboutDialog extends Dialog implements KeyListener, WindowListener {
 			add(label, constraints);
 			if (lineIndex == 0) {
 				Font titleFont = label.getFont();
-				Font newFont = titleFont.deriveFont(Font.BOLD);
+				Font newFont = new Font("Dialog", Font.BOLD, titleFont.getSize() +2);
 				label.setFont(newFont);
 			}
 		}

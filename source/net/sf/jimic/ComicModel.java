@@ -25,9 +25,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -35,10 +34,10 @@ import java.util.zip.ZipFile;
 public class ComicModel {
 
 	private String comicName;
-	
+
 	private int loadStatus;
 
-	private HashMap zipEntryMap;
+	private Hashtable zipEntryMap;
 
 	private String[] zipEntryNames;
 
@@ -46,13 +45,13 @@ public class ComicModel {
 
 	public ComicModel() {
 		super();
-		zipEntryMap = new HashMap();
+		zipEntryMap = new Hashtable();
 	}
 
 	public String getComicName() {
 		return comicName;
 	}
-	
+
 	public String[] getImageNames() {
 		return zipEntryNames;
 	}
@@ -60,12 +59,14 @@ public class ComicModel {
 	public int getImageCount() {
 		return zipEntryMap.size();
 	}
-	
-	public Image getImage(int imageIndex) throws IOException, InterruptedException {
+
+	public Image getImage(int imageIndex) throws IOException,
+			InterruptedException {
 		if (imageIndex < 0) {
-			throw new IllegalArgumentException("imageIndex must be at least 0 but is " + imageIndex);
+			throw new IllegalArgumentException(
+					"imageIndex must be at least 0 but is " + imageIndex);
 		} else if (imageIndex >= getImageCount()) {
-			throw new IllegalArgumentException("imageIndex must be at most " 
+			throw new IllegalArgumentException("imageIndex must be at most "
 					+ (getImageCount() - 1) + " but is " + imageIndex);
 		}
 		return getImage(zipEntryNames[imageIndex]);
@@ -86,12 +87,13 @@ public class ComicModel {
 				String name = entry.getName();
 
 				if (imageFilter.accept(archiveFile, name)) {
-					names.add(name);
+					names.addElement(name);
 					zipEntryMap.put(name, entry);
 				}
 			}
 			if (zipEntryMap.size() == 0) {
-				throw new IllegalArgumentException("comic must contain images using a supported format");
+				throw new IllegalArgumentException(
+						"comic must contain images using a supported format");
 			}
 		} catch (Exception error) {
 			closeZipFile();
@@ -101,10 +103,32 @@ public class ComicModel {
 			throw error2;
 		}
 
-		// TODO: Check if toArray() is JDK 1.1
-		zipEntryNames = (String[]) names.toArray(new String[] {});
-		Arrays.sort(zipEntryNames);
+		zipEntryNames = new String[names.size()];
+		zipEntryNames = toArray(names);
+		sort(zipEntryNames);
 		comicName = archiveFile.getName();
+	}
+
+	private String[] toArray(Vector items) {
+		int itemCount = items.size();
+		String[] result = new String[itemCount];
+		for (int i = 0; i < itemCount; i += 1) {
+			result[i] = (String) items.elementAt(i);
+		}
+		return result;
+	}
+
+	private void sort(String[] a) {
+		// TODO: Replace bubblesort by something faster.
+		int n = a.length;
+		for (int i = 0; i < n - 1; i++) {
+			for (int j = 0; j < n - 1 - i; j++)
+				if (a[j + 1].compareTo(a[j]) < 0) {
+					String tmp = a[j];
+					a[j] = a[j + 1];
+					a[j + 1] = tmp;
+				}
+		}
 	}
 
 	public void closeZipFile() throws IOException {
@@ -138,8 +162,17 @@ public class ComicModel {
 				.getInputStream(entryToRead));
 
 		try {
-			int bytesRead = imageStream.read(imageData);
-			if (bytesRead != bytesToRead) {
+			int indexInFile = 0;
+			int bytesRead;
+
+			do {
+				bytesRead = imageStream.read(imageData, indexInFile,
+						imageData.length - indexInFile);
+				if (bytesRead > 0) {
+					indexInFile += bytesRead;
+				}
+			} while (bytesRead > 0);
+			if (indexInFile != bytesToRead) {
 				throw new IOException("number of bytes read for entry " + name
 						+ " must be " + bytesToRead + " but is " + bytesRead);
 			}

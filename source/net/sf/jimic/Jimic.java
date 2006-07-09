@@ -26,7 +26,7 @@ import java.io.File;
  * @author Thomas Aglassinger.
  */
 public class Jimic {
-	public static final String VERSION_TAG = "0.6";
+	public static final String VERSION_TAG = "0.7";
 
 	public static final String VERSION_DATE = "2006-07-09";
 
@@ -42,6 +42,8 @@ public class Jimic {
 		comicView = new ComicView();
 		controller = new ComicController(comicView, comicModel);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		screenSize.width = 85 * screenSize.width / 100;
+		screenSize.height = 95 * screenSize.height/ 100;
 		comicView.setSize(screenSize);
 		comicView.setVisible(true);
 	}

@@ -18,18 +18,19 @@ package net.sf.jimic;
 
 import java.awt.Cursor;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-
-import javax.swing.event.MouseInputListener;
 
 /**
  * Controller to navigate through a ComicModel displaying an image in a
@@ -38,7 +39,7 @@ import javax.swing.event.MouseInputListener;
  * @author Thomas Aglassinger.
  */
 public class ComicController implements KeyListener, WindowListener,
-		MouseInputListener {
+		MouseListener, MouseMotionListener {
 	private ComicModel comicModel;
 
 	private ComicView comicView;
@@ -58,9 +59,14 @@ public class ComicController implements KeyListener, WindowListener,
 	}
 
 	public void open(File comicFile) throws IOException, InterruptedException {
-		comicModel.openZipFile(comicFile);
-		comicView.setComicModel(comicModel);
-		comicView.requestFocus();
+		try {
+			comicView.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			comicModel.openZipFile(comicFile);
+			comicView.setComicModel(comicModel);
+			comicView.requestFocus();
+		} finally {
+			comicView.setCursor(Cursor.getDefaultCursor());
+		}
 	}
 
 	private void performGoToImage() throws IOException, InterruptedException {
@@ -165,7 +171,7 @@ public class ComicController implements KeyListener, WindowListener,
 			} else if (keyCode == KeyEvent.VK_UP) {
 				performScrollUp();
 			} else {
-				//	System.out.println("ignoring key released: " + keyEvent);
+				// System.out.println("ignoring key released: " + keyEvent);
 			}
 		} catch (Exception error) {
 			showError(keyEvent, error);
@@ -183,11 +189,14 @@ public class ComicController implements KeyListener, WindowListener,
 	}
 
 	private void centerDialog(Dialog dialogToCenter) {
-		int comicViewWidth = comicView.getWidth();
-		int aboutDialogWidth = dialogToCenter.getWidth();
-		int indentToCenterX = (comicViewWidth - aboutDialogWidth) / 2;
-		int indentToCenterY = (comicView.getHeight() - dialogToCenter
-				.getHeight()) / 2;
+		Dimension comicViewSize = comicView.getSize();
+		Dimension dialogSize = dialogToCenter.getSize();
+		int comicViewWidth = comicViewSize.width;
+		int dialogWidth = dialogSize.width;
+		int comicViewHeight = comicViewSize.height;
+		int dialogHeight = dialogSize.height;
+		int indentToCenterX = (comicViewWidth - dialogWidth) / 2;
+		int indentToCenterY = (comicViewHeight - dialogHeight) / 2;
 		Point comicViewLocation = comicView.getLocation();
 		dialogToCenter.setLocation(comicViewLocation.x + indentToCenterX,
 				comicViewLocation.y + indentToCenterY);
@@ -210,6 +219,7 @@ public class ComicController implements KeyListener, WindowListener,
 	private void performQuit() {
 		// TODO: Use Swing.invokeLater()-alike for JDK 1.1
 		dispose();
+		System.exit(0);
 	}
 
 	public void windowOpened(WindowEvent windowEvent) {
@@ -242,13 +252,15 @@ public class ComicController implements KeyListener, WindowListener,
 
 	public void mouseDragged(MouseEvent mouseEvent) {
 		if (lastMouseDragPoint != null) {
-			comicView.scroll(mouseEvent.getX() - lastMouseDragPoint.x, mouseEvent
-					.getY()
-					- lastMouseDragPoint.y);
+			comicView.scroll(mouseEvent.getX() - lastMouseDragPoint.x,
+					mouseEvent.getY() - lastMouseDragPoint.y);
+			if (!mouseDragged) {
+				comicView.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+			}
 			mouseDragged = true;
-			comicView.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 		} else {
-			System.err.println("warning: ignoring drag because lastMouseDragPoint = null");
+			System.err
+					.println("warning: ignoring drag because lastMouseDragPoint = null");
 		}
 		lastMouseDragPoint = mouseEvent.getPoint();
 	}
@@ -266,8 +278,16 @@ public class ComicController implements KeyListener, WindowListener,
 		mouseDragged = false;
 	}
 
+	/**
+	 * Yield
+	 * <code>true<code> if the <code>mouseEvent</code> involves the left mouse button.
+	 */
+	private boolean involvesLeftButton(MouseEvent mouseEvent) {
+		return (mouseEvent.getModifiers() & MouseEvent.BUTTON1_MASK) != 0;
+	}
+
 	public void mouseReleased(MouseEvent mouseEvent) {
-		boolean leftButtonReleased = (mouseEvent.getButton() == MouseEvent.BUTTON1);
+		boolean leftButtonReleased = involvesLeftButton(mouseEvent);
 
 		if (!mouseDragged && leftButtonReleased && (comicModel != null)) {
 			try {
