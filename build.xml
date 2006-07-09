@@ -10,14 +10,14 @@
     </target>
     
     <target name="clean" description="Clean up.">
-        <delete dir="classes"/>
+        <delete dir="classes/net"/>
         <delete file="Jimic.jar"/>
         <delete file="Jimic.zip"/>
     </target>
     
     <target name="release" depends="clean, build" description="Build Jimic.zip for release.">
         <zip destfile="Jimic.zip">
-            <zipfileset dir="." includes="Jimic.jar, *.html, *.txt, *.xml" />
+            <zipfileset dir="." includes="Jimic.jar, jimic.html, *.txt" />
             <zipfileset dir="." includes="source/**/*" />
             <zipfileset dir="." includes="build.xml, .classpath, .project" />
             <zipfileset dir="." includes="settings/**/*" />
