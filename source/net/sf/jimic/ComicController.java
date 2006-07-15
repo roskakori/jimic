@@ -20,6 +20,7 @@ import java.awt.Cursor;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FileDialog;
+import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -47,6 +48,10 @@ public class ComicController implements KeyListener, WindowListener,
 	private Point lastMouseDragPoint;
 
 	private boolean mouseDragged;
+
+	private Frame helpFrame;
+
+	private AboutDialog aboutDialog;
 
 	public ComicController(ComicView newComicView, ComicModel newComicModel) {
 		super();
@@ -150,6 +155,8 @@ public class ComicController implements KeyListener, WindowListener,
 				performAbout();
 			} else if (keyCode == KeyEvent.VK_DOWN) {
 				performScrollDown();
+			} else if (keyCode == KeyEvent.VK_F1) {
+				performHelp();
 			} else if ((keyCode == KeyEvent.VK_G) || (keyCode == KeyEvent.VK_L)) {
 				performGoToImage();
 			} else if (keyCode == KeyEvent.VK_HOME) {
@@ -182,10 +189,21 @@ public class ComicController implements KeyListener, WindowListener,
 		// Do nothing.
 	}
 
-	private void performAbout() {
-		AboutDialog aboutDialog = new AboutDialog(comicView);
-		centerDialog(aboutDialog);
+	private synchronized void performAbout() {
+		if (aboutDialog == null) {
+			aboutDialog = new AboutDialog(comicView);
+			centerDialog(aboutDialog);
+		}
 		aboutDialog.setVisible(true);
+	}
+
+	private synchronized void performHelp() {
+		if (helpFrame == null) {
+			helpFrame = new HelpFrame();
+			helpFrame.pack();
+			helpFrame.setResizable(false);
+		}
+		helpFrame.setVisible(true);
 	}
 
 	private void centerDialog(Dialog dialogToCenter) {
@@ -255,7 +273,8 @@ public class ComicController implements KeyListener, WindowListener,
 			comicView.scroll(mouseEvent.getX() - lastMouseDragPoint.x,
 					mouseEvent.getY() - lastMouseDragPoint.y);
 			if (!mouseDragged) {
-				comicView.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+				comicView.setCursor(Cursor
+						.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			}
 			mouseDragged = true;
 		} else {

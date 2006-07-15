@@ -39,7 +39,7 @@ public class ComicView extends Frame {
 	private int scrollNodge;
 
 	public ComicView() throws HeadlessException {
-		super("Jimic");
+		super("Jimic - Press F1 for keyboard help");
 		imageView = new ImageCanvas();
 		add(imageView);
 		scrollNodge = 12;
