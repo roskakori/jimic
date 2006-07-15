@@ -45,8 +45,11 @@ The limitations are by design, and not considered bugs.</p>
 
 <h2>Requirements</h2>
 
-<p>Jimic requires a Java and its Abstract Windowing Toolkit (AWT). These have been available since
-1997, and are supported by pretty much everything that claims Java with GUI support.</p>
+<p>Jimic is a Java application running as of JDK 1.1 (released in 1997) or any later version.</p>
+
+<p>For Mac OS Classic (version 8 or later), Java has been made available under the name 
+MRJ (Mac OS Runtime for Java), and should still be downloadable from
+<a href="ftp://ftp.apple.com/developer/Java/">ftp://ftp.apple.com/developer/Java/</a>.</p>
 
 <h2>Installation and startup</h2>
 
@@ -55,11 +58,11 @@ any place you like.</p>
 
 <p>To start Jimic from the console, type:</p>
 
-<pre>java -jar /install/path/Jimic.jar</pre>
+<pre>    java -jar /install/path/Jimic.jar</pre>
 
 <p>Optionally you can specify a file name of a comic to open, for example:</p>
 
-<pre>java -jar /install/path/Jimic.jar /comics/blah.cbz</pre>
+<pre>    java -jar /install/path/Jimic.jar /comics/blah.cbz</pre>
 
 <p>On many platforms you can also start Jimic from the desktop by just double-clicking the <code>Jimic.jar</code>.</p>
 
@@ -86,21 +89,28 @@ any place you like.</p>
 <h2>License</h2>
 
 <p>Jimic is copyright 2006 Thomas Aglassinger.</p>
-<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
+<p>This program is free software; you can redistribute it and/or modify it under the terms of the <a href="license.txt">GNU General Public License</a> as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
 <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.</p>
 
-<h2>Source code</h2>
+<h2 id="source-code">Source code</h2>
 
-<p>The source code in included in the <code>Jimic.zip</code> in the directory <code>source</code>. 
-There also is a <code>build.xml</code> for <a href="http://ant.apache.org/">ant</a>.
-To compile the source code, run:</p>
+<p>The source code in included in the <code>Jimic.zip</code> in the directory
+<code>source</code>. There is also a Subversion repository at 
+<a href="https://svn.sourceforge.net/svnroot/jomic/trunk/jimic">https://svn.sourceforge.net/svnroot/jomic/trunk/jimic</a>
+(as part of the <a href="http://jomic.sourceforge.net">Jomic</a> project).</p>
 
-<pre>ant</pre>
+<p>To compile the application, use the included <code>build.xml</code> for <a href="http://ant.apache.org/">ant</a>, and run:</p>
+
+<pre>    ant</pre>
 
 To get information about other targets, run:
 
-<pre>ant -projecthelp</pre>
+<pre>    ant -projecthelp</pre>
+
+<p>To build the Jimic application for Mac OS Classic, use JBindery,
+which is included in the MRJ SDK, available from
+<a href="ftp://ftp.apple.com/developer/Development_Kits/">ftp://ftp.apple.com/developer/Development_Kits/</a>.</p>
 
 </body>
 </html>
