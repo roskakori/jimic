@@ -64,25 +64,25 @@ public class AboutDialog extends Dialog implements KeyListener, WindowListener {
 		addKeyListener(this);
 	}
 
-	public void windowOpened(WindowEvent e) {
+	public void windowOpened(WindowEvent windowEvent) {
 		// Do nothing.
 	}
 
-	public void windowClosing(WindowEvent e) {
+	public void windowClosing(WindowEvent windowEvent) {
 		removeKeyListener(this);
 		removeWindowListener(this);
 		dispose();
 	}
 
-	public void windowClosed(WindowEvent e) {
+	public void windowClosed(WindowEvent windowEvent) {
 		// Do nothing.
 	}
 
-	public void windowIconified(WindowEvent e) {
+	public void windowIconified(WindowEvent windowEvent) {
 		// Do nothing.
 	}
 
-	public void windowDeiconified(WindowEvent e) {
+	public void windowDeiconified(WindowEvent windowEvent) {
 		// Do nothing.
 	}
 
