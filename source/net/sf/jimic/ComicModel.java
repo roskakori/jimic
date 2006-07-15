@@ -142,18 +142,18 @@ public class ComicModel {
 		}
 	}
 
-	public Image getImage(String name) throws IOException, InterruptedException {
+	public Image getImage(String imageNameInZip) throws IOException, InterruptedException {
 		Image result;
 
-		ZipEntry entryToRead = (ZipEntry) zipEntryMap.get(name);
-		if (name == null) {
-			throw new IllegalArgumentException("name must be zip file: " + name);
+		ZipEntry entryToRead = (ZipEntry) zipEntryMap.get(imageNameInZip);
+		if (imageNameInZip == null) {
+			throw new IllegalArgumentException("name must be zip file: " + imageNameInZip);
 		}
 		long entrySize = entryToRead.getSize();
 		if (entrySize < 0) {
-			throw new IOException("cannot obtain size of entry: " + name);
+			throw new IOException("cannot obtain size of entry: " + imageNameInZip);
 		} else if (entrySize > Integer.MAX_VALUE) {
-			throw new IOException("size of entry " + name + " must be at most "
+			throw new IOException("size of entry " + imageNameInZip + " must be at most "
 					+ Integer.MAX_VALUE + " but is " + entrySize);
 		}
 		int bytesToRead = (int) entrySize;
@@ -173,13 +173,13 @@ public class ComicModel {
 				}
 			} while (bytesRead > 0);
 			if (indexInFile != bytesToRead) {
-				throw new IOException("number of bytes read for entry " + name
+				throw new IOException("number of bytes read for entry " + imageNameInZip
 						+ " must be " + bytesToRead + " but is " + bytesRead);
 			}
 		} finally {
 			imageStream.close();
 		}
-		result = readImage(imageData);
+		result = readImage(imageNameInZip, imageData);
 		return result;
 	}
 
@@ -189,7 +189,7 @@ public class ComicModel {
 	 * 
 	 * @see Toolkit#getImage(java.lang.String)
 	 */
-	public Image readImage(byte[] imageData) throws InterruptedException,
+	public Image readImage(String name, byte[] imageData) throws InterruptedException,
 			IOException {
 		Image imageToLoad = Toolkit.getDefaultToolkit().createImage(imageData);
 		Component component = new Component() {
@@ -205,7 +205,7 @@ public class ComicModel {
 		if (loadStatus == MediaTracker.ABORTED) {
 			throw new InterruptedException("image loading cancelled");
 		} else if (loadStatus == MediaTracker.ERRORED) {
-			throw new IOException("cannot read or parse image: " + imageData);
+			throw new IOException("cannot read or parse image: " + name);
 		}
 		return imageToLoad;
 	}
