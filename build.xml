@@ -2,25 +2,25 @@
 <project basedir="." default="build" name="jimic">
     <target name="build" description="Build the Jimic application JAR.">
         <mkdir dir="classes"/>
-        <javac srcdir="source" destdir="classes" debug="on" source="1.1" target="1.1" />
+        <javac srcdir="source" destdir="classes" debug="on" includeantruntime="false" source="1.1" target="1.1" />
         <jar destfile="Jimic.jar" basedir="classes" manifest="source/Manifest.txt">
             <include name="**/*.class"/>
         </jar>
         <jar destfile="Jimic.jar" basedir="." includes="source" update="true" />
     </target>
-    
+
     <target name="clean" description="Clean up.">
         <delete dir="classes/net"/>
         <delete file="Jimic.jar"/>
         <delete file="Jimic.zip"/>
     </target>
-    
+
     <target name="release" depends="clean, build" description="Build Jimic.zip for release.">
         <zip destfile="Jimic.zip">
             <zipfileset dir="." includes="Jimic.jar, jimic.html, *.txt" />
             <zipfileset dir="." includes="source/**/*" />
             <zipfileset dir="." includes="build.xml, .classpath, .project" />
-            <zipfileset dir="." includes="settings/**/*" />
+            <zipfileset dir="." includes=".settings/**/*" />
         </zip>
     </target>
 </project>
